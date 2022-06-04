@@ -1,8 +1,11 @@
-import { OrbitControls } from "@react-three/drei"
+import { OrbitControls, Stats } from "@react-three/drei"
 import { Canvas } from "@react-three/fiber"
-import { BackSide } from "three"
 import BasicShaderClassPlane from "../Objects/BasicShaderClassPlane"
 import OnBeforeCompilePlane from "../Objects/OnBeforeCompilePlane"
+import TestCube from "../Objects/TestCube"
+import POST_Edges_01 from "../PostProcessing/Shaders/Edges_01/POST_Edges_01"
+
+//https://codesandbox.io/s/elastic-dhawan-c8wk9l?file=/src/shaders/00.js
 
 function SceneMain() {
   return (
@@ -15,10 +18,11 @@ function SceneMain() {
         // position: [0, 0, 10],
       }}
     >
-      {/* <Canvas orthographic={true} camera={{ zoom: 50, position: [0, 0, 100] }}> */}
+      <Stats />
       <OrbitControls />
-      <BasicShaderClassPlane />
       {/* <OnBeforeCompilePlane /> */}
+      <TestCube />
+      <POST_Edges_01 />
     </Canvas>
   )
 }
