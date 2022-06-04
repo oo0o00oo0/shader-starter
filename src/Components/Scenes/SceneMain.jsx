@@ -23,6 +23,7 @@ function SceneMain() {
       {/* <OnBeforeCompilePlane /> */}
       <TestCube />
       {/* <POST_Edges_01 /> */}
+      <axisHelper args={[200]} />
     </Canvas>
   )
 }

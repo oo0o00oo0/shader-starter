@@ -48,6 +48,7 @@ const ShaderMat = shaderMaterial(
     uMouseX: 0.0,
     uTexture: new THREE.Texture(),
     uActiveEl: null,
+    uMix: 0,
   },
   vertex,
   fragment
@@ -64,7 +65,25 @@ function AnimatedBakedMaterial({ toggle, map, activeEl }) {
     shadRef.current.uniforms.uActiveEl.value = activeEl
   }, [activeEl])
 
+  const direction = new THREE.Vector3()
+
+  const origin = new THREE.Vector3(0, 0, 0)
+  const line = new THREE.Vector3(1, 0, 0)
+
   useFrame((state) => {
+    shadRef.current.uniforms.uMix.value = THREE.MathUtils.mapLinear(
+      direction
+        .subVectors(state.camera.position, origin)
+        .normalize()
+        .angleTo(line),
+      0,
+      1,
+      0,
+      1
+    )
+
+    // console.log(shadRef.current.uniforms.uMix.value)
+
     shadRef.current.uniforms.uMouseX.value = Math.floor(
       MathUtils.mapLinear(state.mouse.x, -1, 1, 0, 6)
     )

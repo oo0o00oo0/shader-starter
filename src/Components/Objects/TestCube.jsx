@@ -1,6 +1,7 @@
 import { useGLTF, useTexture } from "@react-three/drei"
+import { useFrame } from "@react-three/fiber"
 import { useState, useEffect, useRef } from "react"
-import { BufferAttribute } from "three"
+import { BufferAttribute, Vector3 } from "three"
 import AnimatedBakedMaterial from "../Materials/Shaders/__BAKED__/AnimatedBakedMaterial/AnimatedBakedMaterial"
 import { uvAtt } from "../Objects/data"
 
