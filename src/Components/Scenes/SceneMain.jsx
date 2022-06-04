@@ -1,4 +1,4 @@
-import { OrbitControls, Stats } from "@react-three/drei"
+import { OrbitControls, Sphere, Stats } from "@react-three/drei"
 import { Canvas } from "@react-three/fiber"
 import BasicShaderClassPlane from "../Objects/BasicShaderClassPlane"
 import OnBeforeCompilePlane from "../Objects/OnBeforeCompilePlane"
@@ -14,7 +14,7 @@ function SceneMain() {
       camera={{
         fov: 90,
         // zoom: 500,
-        position: [0, 0, 60],
+        position: [0, 40, 60],
         // position: [0, 0, 10],
       }}
     >
@@ -22,7 +22,7 @@ function SceneMain() {
       <OrbitControls />
       {/* <OnBeforeCompilePlane /> */}
       <TestCube />
-      <POST_Edges_01 />
+      {/* <POST_Edges_01 /> */}
     </Canvas>
   )
 }
