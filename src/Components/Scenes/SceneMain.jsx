@@ -5,11 +5,18 @@ import {
   Stats,
 } from "@react-three/drei"
 import { Canvas, useFrame } from "@react-three/fiber"
-import BasicShaderClassPlane from "../Objects/BasicShaderClassPlane"
-import OnBeforeCompilePlane from "../Objects/OnBeforeCompilePlane"
-import TestCube from "../Objects/TestCube"
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile,
+} from "react-device-detect"
+
+// import BasicShaderClassPlane from "../Objects/BasicShaderClassPlane"
+// import OnBeforeCompilePlane from "../Objects/OnBeforeCompilePlane"
+// import TestCube from "../Objects/TestCube"
 import ExplodeMesh from "../Objects/ExplodeMesh"
-import POST_Edges_01 from "../PostProcessing/Shaders/Edges_01/POST_Edges_01"
+// import POST_Edges_01 from "../PostProcessing/Shaders/Edges_01/POST_Edges_01"
 import { useRef } from "react"
 
 //https://codesandbox.io/s/elastic-dhawan-c8wk9l?file=/src/shaders/00.js
@@ -27,11 +34,13 @@ function SceneMain() {
       }}
     >
       {/* <Stats /> */}
-      {/* <OrbitControls enableZoom={false} /> */}
+      {!isMobile && <OrbitControls enableZoom={false} enablePan={false} />}
       {/* <CustCam /> */}
       {/* <OnBeforeCompilePlane /> */}
       {/* <TestCube /> */}
-      <ExplodeMesh />
+      <group position={[0, 9, 0]}>
+        <ExplodeMesh />
+      </group>
       {/* <POST_Edges_01 /> */}
       {/* <axisHelper args={[200]} /> */}
     </Canvas>

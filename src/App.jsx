@@ -7,14 +7,14 @@ import SceneMain from "./Components/Scenes/SceneMain"
 
 function App() {
   return (
-    <PageWrapper>
-      <Holder>
-        <SceneContainer>
-          <SceneMain />
-          <SkyIDDisplay />
-        </SceneContainer>
-      </Holder>
-    </PageWrapper>
+    // <PageWrapper>
+    <Holder>
+      <SceneContainer>
+        <SceneMain />
+        <SkyIDDisplay />
+      </SceneContainer>
+    </Holder>
+    // </PageWrapper>
   )
 }
 

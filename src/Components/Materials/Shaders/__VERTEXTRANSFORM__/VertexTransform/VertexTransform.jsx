@@ -60,24 +60,31 @@ extend({ ShaderMat })
 const AniamtedShaderMat = animated("shaderMat")
 
 function VertexTransform({ toggle, map, activeEl }) {
-  const ref = useRef()
+  const ref = useRef(0)
 
   const windowHeight = window.innerHeight
   const [{ scrollPos }, api] = useSpring(() => ({
-    scrollPos: 0,
+    scrollPos: 3,
     // config: { mass: 20 },
   }))
-
-  console.log(windowHeight * 4)
 
   //when scrolling occurs call the setter created by react spring to update the scrollPos value
   const onScroll = useCallback(
     (e) => {
+      // console.log(
+      //   MathUtils.mapLinear(window.scrollY, 0, windowHeight * 3, 1, 0)
+      // )
+      ref.current = MathUtils.clamp(
+        MathUtils.mapLinear(window.scrollY, 0, windowHeight * 3, 3, 0),
+        0,
+        3
+      )
+
       // console.log(windowHeight * 4 - window.scrollY)
       //Without Spring
       //  groupRef.current.position.x = scrollObj.current.scrollTop * 0.01
       api.start({
-        scrollPos: window.scrollY / windowHeight,
+        scrollPos: ref.current,
       })
     },
     [scrollPos]
