@@ -68,6 +68,8 @@ function TestCube() {
             set(!toggle)
           }}
         >
+          {/* <meshBasicMaterial /> */}
+          {/* <boxBufferGeometry /> */}
           <AnimatedBakedMaterial
             activeEl={activeEl}
             map={diffuse}

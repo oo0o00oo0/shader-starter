@@ -2,10 +2,11 @@ import * as THREE from "three"
 import { nanoid } from "nanoid"
 import { extend, useFrame } from "@react-three/fiber"
 import { animated, useSpring } from "@react-spring/three"
-import vertex from "./shades/AnimatedBaked.vert"
-import fragment from "./shades/AnimatedBaked.frag"
-import { useRef, useEffect } from "react"
+import vertex from "./shades/VertexTransform.vert"
+import fragment from "./shades/VertexTransform.frag"
+import { useRef, useEffect, useCallback } from "react"
 import { MathUtils } from "three"
+import { useStore } from "../../../../Objects/store"
 // import { shaderMaterial } from "@react-three/drei"
 
 function shaderMaterial(uniforms, vertexShader, fragmentShader, onInit) {
@@ -49,6 +50,7 @@ const ShaderMat = shaderMaterial(
     uTexture: new THREE.Texture(),
     uActiveEl: null,
     uMix: 0,
+    uActiveFace: null,
   },
   vertex,
   fragment
@@ -57,44 +59,67 @@ const ShaderMat = shaderMaterial(
 extend({ ShaderMat })
 const AniamtedShaderMat = animated("shaderMat")
 
-function AnimatedBakedMaterial({ toggle, map, activeEl }) {
+function VertexTransform({ toggle, map, activeEl }) {
+  const ref = useRef()
+
+  const windowHeight = window.innerHeight
+  const [{ scrollPos }, api] = useSpring(() => ({
+    scrollPos: 0,
+    // config: { mass: 20 },
+  }))
+
+  console.log(windowHeight * 4)
+
+  //when scrolling occurs call the setter created by react spring to update the scrollPos value
+  const onScroll = useCallback(
+    (e) => {
+      // console.log(windowHeight * 4 - window.scrollY)
+      //Without Spring
+      //  groupRef.current.position.x = scrollObj.current.scrollTop * 0.01
+      api.start({
+        scrollPos: window.scrollY / windowHeight,
+      })
+    },
+    [scrollPos]
+  )
+
+  const skyID = useStore((s) => s.skyID)
+
+  window.addEventListener("scroll", onScroll)
+
   const shadRef = useRef()
 
   useEffect(() => {
-    console.log(activeEl)
-    shadRef.current.uniforms.uActiveEl.value = activeEl
-  }, [activeEl])
+    shadRef.current.uniforms.uActiveFace.value = skyID
+  }, [skyID])
 
-  const direction = new THREE.Vector3()
+  // const direction = new THREE.Vector3()
+  // const origin = new THREE.Vector3(0, 0, 0)
+  // const line = new THREE.Vector3(1, 0, 0)
 
-  const origin = new THREE.Vector3(0, 0, 0)
-  const line = new THREE.Vector3(1, 0, 0)
+  // useFrame((state) => {
+  //   shadRef.current.uniforms.uMix.value = THREE.MathUtils.mapLinear(
+  //     direction
+  //       .subVectors(state.camera.position, origin)
+  //       .normalize()
+  //       .angleTo(line),
+  //     0,
+  //     1,
+  //     0,
+  //     1
+  //   )
 
-  useFrame((state) => {
-    shadRef.current.uniforms.uMix.value = THREE.MathUtils.mapLinear(
-      direction
-        .subVectors(state.camera.position, origin)
-        .normalize()
-        .angleTo(line),
-      0,
-      1,
-      0,
-      1
-    )
-
-    // console.log(shadRef.current.uniforms.uMix.value)
-
-    shadRef.current.uniforms.uMouseX.value = Math.floor(
-      MathUtils.mapLinear(state.mouse.x, -1, 1, 0, 6)
-    )
-  })
+  //   shadRef.current.uniforms.uMouseX.value = state.mouse.x
+  // })
 
   const { time } = useSpring({
-    time: toggle ? 0 : 1,
+    time: toggle ? 0 : Math.PI,
+    config: { duration: 3000 },
   })
 
+  // return <meshBasicMaterial />
+
   return (
-    // <meshBasicMaterial />
     <AniamtedShaderMat
       transparent={true}
       side={THREE.DoubleSide}
@@ -102,10 +127,11 @@ function AnimatedBakedMaterial({ toggle, map, activeEl }) {
       uActiveEl={activeEl}
       uTexture={map}
       uTime={time}
-      uMouseX={0.0}
+      uMix={time}
+      uMouseX={scrollPos}
       attach="material"
     />
   )
 }
 
-export default AnimatedBakedMaterial
+export default VertexTransform
