@@ -4,9 +4,10 @@ import { extend, useFrame } from "@react-three/fiber"
 import { animated, useSpring } from "@react-spring/three"
 import vertex from "./shades/VertexTransform.vert"
 import fragment from "./shades/VertexTransform.frag"
-import { useRef, useEffect, useCallback } from "react"
+import { useRef, useEffect, useCallback, useState } from "react"
 import { MathUtils } from "three"
 import { useStore } from "../../../../Objects/store"
+import { ServerStyleSheet } from "styled-components"
 // import { shaderMaterial } from "@react-three/drei"
 
 function shaderMaterial(uniforms, vertexShader, fragmentShader, onInit) {
@@ -48,6 +49,7 @@ const ShaderMat = shaderMaterial(
     uTime: 0.0,
     uMouseX: 0.0,
     uTexture: new THREE.Texture(),
+    uRestText: new THREE.Texture(),
     uActiveEl: null,
     uMix: 0,
     uActiveFace: null,
@@ -59,8 +61,10 @@ const ShaderMat = shaderMaterial(
 extend({ ShaderMat })
 const AniamtedShaderMat = animated("shaderMat")
 
-function VertexTransform({ toggle, map, activeEl }) {
+function VertexTransform({ toggle, map, activeEl, onRest }) {
   const ref = useRef(0)
+
+  const [isRest, set] = useState()
 
   const windowHeight = window.innerHeight
   const [{ scrollPos }, api] = useSpring(() => ({
@@ -79,6 +83,12 @@ function VertexTransform({ toggle, map, activeEl }) {
         0,
         3
       )
+
+      if (ref.current < 0.002) {
+        set(true)
+      } else {
+        set(false)
+      }
 
       // console.log(windowHeight * 4 - window.scrollY)
       //Without Spring
@@ -120,8 +130,9 @@ function VertexTransform({ toggle, map, activeEl }) {
   // })
 
   const { time } = useSpring({
-    time: toggle ? 0 : Math.PI,
-    config: { duration: 3000 },
+    time: isRest ? 0 : 1,
+    delay: isRest ? 500 : 0,
+    // config: { duration: 000 },
   })
 
   // return <meshBasicMaterial />
@@ -135,6 +146,7 @@ function VertexTransform({ toggle, map, activeEl }) {
       uTexture={map}
       uTime={time}
       uMix={time}
+      uRestText={onRest}
       uMouseX={scrollPos}
       attach="material"
     />

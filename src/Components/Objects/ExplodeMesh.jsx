@@ -12,8 +12,10 @@ function ExplodeMesh({ scrollPos }) {
   const setSkyID = useStore((s) => s.setSkyID)
   const { nodes } = useGLTF("assets/transformtests.glb")
   const diffuse = useTexture("assets/testoutput.jpg")
+  const onRest = useTexture("assets/onrest.jpg")
 
   diffuse.flipY = false
+  onRest.flipY = false
 
   const nodesArr = Object.values(nodes)
 
@@ -90,7 +92,7 @@ function ExplodeMesh({ scrollPos }) {
             set(!toggle)
           }}
         >
-          <VertexTransform toggle={toggle} map={diffuse} />
+          <VertexTransform toggle={toggle} onRest={onRest} map={diffuse} />
         </mesh>
       ))}
     </group>
