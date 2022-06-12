@@ -40,7 +40,7 @@ function SceneMain() {
         fov: 60,
         far: 2000,
         // zoom: 500,
-        position: [-20, 120, 0],
+        position: [-20, 1200, 0],
       }}
     >
       {/* <PointerLockControls /> */}
@@ -53,7 +53,7 @@ function SceneMain() {
         <ExplodeMesh />
       </group>
 
-      {/* <CustCam /> */}
+      <CustCam />
       {/* <POST_Edges_01 /> */}
       {/* <axisHelper args={[200]} /> */}
     </Canvas>
@@ -62,71 +62,47 @@ function SceneMain() {
 
 function CustCam() {
   const camRef = useRef()
+  const position = new Vector3()
 
-  const scrollRef = useRef()
+  function getScrollPos() {
+    let t = MathUtils.clamp(
+      MathUtils.mapLinear(window.scrollY, -1, 3000, 0.01, 0.99),
+      0,
+      1
+    )
+    let pos = tubeGeometry.parameters.path.getPointAt(t)
+
+    // console.log(pos)
+    return [pos.x, pos.y, pos.z]
+  }
+
   const sphereRef = useRef()
   const tubeGeometry = new TubeGeometry(pipeSpline, 100, 2, 6, false)
 
   const [{ scrollPos }, api] = useSpring(() => ({
-    scrollPos: 0,
+    scrollPos: [],
   }))
 
   const onScroll = useCallback((e) => {
-    sphereRef.current.position.x = tubeGeometry.parameters.path.getPointAt(
-      MathUtils.clamp(window.scrollY, 0, window.innerHeight * 3) /
-        (window.innerHeight * 3),
-      position
-    ).x
-    sphereRef.current.position.y = tubeGeometry.parameters.path.getPointAt(
-      MathUtils.clamp(window.scrollY, 0, window.innerHeight * 3) /
-        (window.innerHeight * 3),
-      position
-    ).y
-    sphereRef.current.position.z = tubeGeometry.parameters.path.getPointAt(
-      MathUtils.clamp(window.scrollY, 0, window.innerHeight * 3) /
-        (window.innerHeight * 3),
-      position
-    ).z
-
     api.start({
-      scrollPos: scrollRef.current,
+      scrollPos: getScrollPos(),
     })
   }, [])
 
   window.addEventListener("scroll", onScroll)
 
-  const position = new Vector3()
-
-  // useFrame(({ clock }) => {
-  //   // const t = ((clock.getElapsedTime() * 60) % looptime) / looptime
-
-  //   // tubeGeometry.parameters.path.getPointAt(t, position)
-  //   // position.multiplyScalar(1)
-  //   // sphereRef.current.position.x = tubeGeometry.parameters.path.getPointAt(
-  //   //   t,
-  //   //   position
-  //   // ).x
-  //   // sphereRef.current.position.y = tubeGeometry.parameters.path.getPointAt(
-  //   //   t,
-  //   //   position
-  //   // ).y
-  //   // sphereRef.current.position.z = tubeGeometry.parameters.path.getPointAt(
-  //   //   t,
-  //   //   position
-  //   // ).z
-  //   // console.log(position)
-  // })
-
   return (
     <>
-      <PerspectiveCamera ref={camRef} makeDefault />
-      <animated.mesh ref={sphereRef}>
+      <animated.group position={scrollPos}>
+        <PerspectiveCamera ref={camRef} makeDefault />
+      </animated.group>
+      {/* <animated.mesh position={scrollPos} ref={sphereRef}>
         <sphereBufferGeometry args={[50, 10, 10]} />
         <meshBasicMaterial color={"red"} />
-      </animated.mesh>
-      <mesh geometry={tubeGeometry}>
+      </animated.mesh> */}
+      {/* <mesh geometry={tubeGeometry}>
         <meshBasicMaterial side={DoubleSide} color="black" />
-      </mesh>
+      </mesh> */}
     </>
   )
 }

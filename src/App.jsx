@@ -59,17 +59,18 @@ const SceneContainer = styled.div`
   position: sticky;
   top: 0;
   background-image: linear-gradient(
-    45deg,
-    hsl(208deg 29% 91%) 0%,
-    hsl(200deg 32% 91%) 11%,
-    hsl(192deg 32% 90%) 22%,
-    hsl(183deg 29% 90%) 33%,
-    hsl(172deg 29% 90%) 44%,
-    hsl(158deg 29% 90%) 56%,
-    hsl(140deg 26% 91%) 67%,
-    hsl(109deg 23% 91%) 78%,
-    hsl(80deg 26% 90%) 89%,
-    hsl(56deg 29% 90%) 100%
+    180deg,
+    hsl(205deg 49% 47%) 0%,
+    hsl(202deg 51% 48%) 10%,
+    hsl(199deg 51% 49%) 20%,
+    hsl(197deg 49% 50%) 30%,
+    hsl(195deg 49% 51%) 40%,
+    hsl(193deg 48% 53%) 50%,
+    hsl(188deg 51% 54%) 60%,
+    hsl(184deg 51% 56%) 70%,
+    hsl(178deg 52% 59%) 80%,
+    hsl(171deg 57% 64%) 90%,
+    hsl(163deg 63% 70%) 100%
   );
   /* background: #1d1d1d; */
 
