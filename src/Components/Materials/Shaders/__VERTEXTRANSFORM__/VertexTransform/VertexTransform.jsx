@@ -79,7 +79,7 @@ function VertexTransform({ toggle, map, activeEl, onRest }) {
       //   MathUtils.mapLinear(window.scrollY, 0, windowHeight * 3, 1, 0)
       // )
       ref.current = MathUtils.clamp(
-        MathUtils.mapLinear(window.scrollY, 0, windowHeight * 3, 3, 0),
+        MathUtils.mapLinear(window.scrollY, 0, windowHeight * 3, 1, 0),
         0,
         3
       )

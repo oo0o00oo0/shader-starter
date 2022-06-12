@@ -21,6 +21,7 @@ precision highp float;
 // ...
 attribute float faceID;
 attribute vec3 a_centroid;
+attribute vec3 a_startPoint;
 attribute vec3 axis;
 
 uniform float uMouseX;
@@ -34,7 +35,6 @@ varying float vFaceID;
 float offset=.3;
 float tProgress=.5;
 vec3 vNormal=vec3(.5,0,.3);
-// vec3 axis=vec3(0.,1.,0.);
 
 mat4 rotationMatrix(vec3 axis,float angle){
   axis=normalize(axis);
@@ -59,39 +59,19 @@ void main(){
   vUv=uv;
   pos=position;
   
-  vec3 p=position.xyz-a_centroid;
+  vec3 p=position.xyz;
   
-  // vec3 newPosition=position-a_centroid;
+  // p.y+=a_centroid.z;
+  // p.x-=a_centroid.x;
+  // p.z+=a_centroid.y;
   
-  vec3 newPosition=rotate(p,axis,uMouseX);
-  // vec3 newPosition=rotate(p+a_centroid,axis,uMouseX);
+  // vec3 newPosition=rotate(p,axis,uMouseX);
+  // vec3 testNew=rotate(p,vec3(0.,0.,0.),0.);
+  // vec3 newPosition=rotate(p,vec3(0.,0.,0.),0.);
   
-  newPosition+=a_centroid;
+  vec3 blend=mix(p.xzy,vec3(a_startPoint.x,a_startPoint.z,a_startPoint.y),uMouseX);
   
-  // float new_x=p.x*cos(uMouseX)-p.y*sin(uMouseX);
-  // float new_y=p.y*cos(uMouseX)+p.x*sin(uMouseX);
-  
-  gl_Position=projectionMatrix*modelViewMatrix*vec4(newPosition,1.);
-  ///////////////////////////////////////
-  // gl_Position=projectionMatrix*modelViewMatrix*vec4(newPosition,1.);
-  // vec4 modelPosition=modelMatrix*vec4(vec3(position.x,position.y,position.z),1.);
-  // // modelPosition.z+=200.;
-  // vec4 viewPosition=viewMatrix*modelPosition;
-  // vec4 projectedPosition=projectionMatrix*viewPosition;
-  // gl_Position=projectedPosition;
-  
-  // vec3 newposition=position;
-  
-  // vec3 newnormal=rotate(normal,axis,tProgress);
-  // // vNormal=newnormal;
-  
-  // newposition+=newposition+centroid*(tProgress)*(3.+offset*7.);
-  // // gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);
-  
-  // vec4 worldPosition=modelMatrix*vec4(newposition,1.);
-  // vec3 worldNormal=normalize(mat3(modelMatrix[0].xyz,modelMatrix[1].xyz,modelMatrix[2].xyz)*newnormal);
-  // vec3 I=worldPosition.xyz-cameraPosition;
-  // gl_Position=projectionMatrix*modelViewMatrix*vec4(newposition,1.);
+  gl_Position=projectionMatrix*modelViewMatrix*vec4(blend,1.);
   
 }
 

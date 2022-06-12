@@ -58,8 +58,22 @@ const Holder = styled.div`
 const SceneContainer = styled.div`
   position: sticky;
   top: 0;
+  background-image: linear-gradient(
+    45deg,
+    hsl(208deg 29% 91%) 0%,
+    hsl(200deg 32% 91%) 11%,
+    hsl(192deg 32% 90%) 22%,
+    hsl(183deg 29% 90%) 33%,
+    hsl(172deg 29% 90%) 44%,
+    hsl(158deg 29% 90%) 56%,
+    hsl(140deg 26% 91%) 67%,
+    hsl(109deg 23% 91%) 78%,
+    hsl(80deg 26% 90%) 89%,
+    hsl(56deg 29% 90%) 100%
+  );
   /* background: #1d1d1d; */
-  background: #d5e1e5;
+
+  /* background: #d5e1e5; */
   /* border: #323232 solid 2px; */
   /* box-shadow: 10px 10px 8px #b0b7b9;
   left: 50%;
