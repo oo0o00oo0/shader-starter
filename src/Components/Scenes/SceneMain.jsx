@@ -7,7 +7,7 @@ import {
   Sphere,
   Stats,
 } from "@react-three/drei"
-import { Canvas, useFrame } from "@react-three/fiber"
+import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import {
   BrowserView,
   MobileView,
@@ -39,13 +39,12 @@ function SceneMain() {
       camera={{
         fov: 60,
         far: 2000,
-        // zoom: 500,
-        position: [-20, 1200, 0],
+        position: [-5.4869334241893455, 94.41779388991088, 47.47049513898217],
       }}
     >
       {/* <PointerLockControls /> */}
       {/* <Stats /> */}
-      {!isMobile && <OrbitControls enableZoom={false} enablePan={false} />}
+      {/* {!isMobile && <OrbitControls enableZoom={false} enablePan={false} />} */}
       {/* <CustCam /> */}
       {/* <OnBeforeCompilePlane /> */}
       {/* <TestCube /> */}
@@ -53,6 +52,7 @@ function SceneMain() {
         <ExplodeMesh />
       </group>
 
+      {/* <OrbitControls /> */}
       <CustCam />
       {/* <POST_Edges_01 /> */}
       {/* <axisHelper args={[200]} /> */}
@@ -62,7 +62,7 @@ function SceneMain() {
 
 function CustCam() {
   const camRef = useRef()
-  const position = new Vector3()
+  const { camera } = useThree()
 
   function getScrollPos() {
     let t = MathUtils.clamp(
@@ -71,12 +71,9 @@ function CustCam() {
       1
     )
     let pos = tubeGeometry.parameters.path.getPointAt(t)
-
-    // console.log(pos)
     return [pos.x, pos.y, pos.z]
   }
 
-  const sphereRef = useRef()
   const tubeGeometry = new TubeGeometry(pipeSpline, 100, 2, 6, false)
 
   const [{ scrollPos }, api] = useSpring(() => ({
@@ -89,6 +86,11 @@ function CustCam() {
     })
   }, [])
 
+  document.addEventListener("keydown", (e) => {
+    e.key === "s" &&
+      console.log([camera.position.x, camera.position.y, camera.position.z])
+  })
+
   window.addEventListener("scroll", onScroll)
 
   return (
@@ -96,13 +98,7 @@ function CustCam() {
       <animated.group position={scrollPos}>
         <PerspectiveCamera ref={camRef} makeDefault />
       </animated.group>
-      {/* <animated.mesh position={scrollPos} ref={sphereRef}>
-        <sphereBufferGeometry args={[50, 10, 10]} />
-        <meshBasicMaterial color={"red"} />
-      </animated.mesh> */}
-      {/* <mesh geometry={tubeGeometry}>
-        <meshBasicMaterial side={DoubleSide} color="black" />
-      </mesh> */}
+      {/* <OrbitControls /> */}
     </>
   )
 }
