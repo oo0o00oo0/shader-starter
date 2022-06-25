@@ -20,6 +20,9 @@ import vertex from "./shades/edges_01_vertex_wgl2.vert"
 import fragment from "./shades/edges_01_fragment_wgl2.frag"
 import { MathUtils } from "three"
 import { ShaderPass } from "../../Generic/ShaderPass.jsx"
+import { useStore } from "../../../Objects/store.js"
+import { useRef } from "react"
+import { useEffect } from "react"
 const normalMat = new MeshNormalMaterial({ side: DoubleSide })
 // const coordsMat = new CoordsMaterial()
 
@@ -54,7 +57,7 @@ function POST_Edges_01() {
     contour: 2,
     paperGrid: 0.25,
     objectGrid: 0.25,
-    inkColor: new Color(232, 82, 74),
+    inkColor: new Color(35, 48, 47),
     paperColor: new Color(239, 208, 175),
     angleGrid: 0,
     angleDark: (15 * Math.PI) / 180,
@@ -112,6 +115,12 @@ function POST_Edges_01() {
   composer.addPass(renderScene)
   composer.addPass(sketchPass)
 
+  const mouseRef = useRef(useStore.getState().mouseDown)
+  // Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
+  useEffect(() =>
+    useStore.subscribe((state) => (mouseRef.current = state.mouseDown))
+  )
+
   useFrame(({ gl, scene, camera }) => {
     // sketchPass.shader.uniforms.uBlend.value = MathUtils.lerp(
     //   sketchPass.shader.uniforms.uBlend.value,
@@ -119,10 +128,22 @@ function POST_Edges_01() {
     //   0.08
     // )
 
-    sketchPass.shader.uniforms.uBlend.value = 0.1
+    // console.log(mouseRef)
+    // console.log(sketchPass.shader.uniforms.uBlend.value)
+
+    if (mouseRef.current && sketchPass.shader.uniforms.uBlend.value < 1) {
+      sketchPass.shader.uniforms.uBlend.value += 0.04
+    } else if (
+      !mouseRef.current &&
+      sketchPass.shader.uniforms.uBlend.value > 0
+    ) {
+      sketchPass.shader.uniforms.uBlend.value -= 0.08
+    }
+
+    // sketchPass.shader.uniforms.uBlend.value = 0.9
     gl.autoClear = false
 
-    camera.layers.set(1)
+    // camera.layers.set(1)
     gl.setRenderTarget(colorFBO)
     gl.clear()
     gl.render(scene, camera)
@@ -139,7 +160,7 @@ function POST_Edges_01() {
 
     gl.clearDepth()
 
-    camera.layers.set(0)
+    // camera.layers.set(0)
     gl.render(scene, camera)
   }, 1)
 

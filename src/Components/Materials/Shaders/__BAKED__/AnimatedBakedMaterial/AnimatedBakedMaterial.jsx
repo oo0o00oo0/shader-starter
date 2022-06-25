@@ -6,6 +6,7 @@ import vertex from "./shades/AnimatedBaked.vert"
 import fragment from "./shades/AnimatedBaked.frag"
 import { useRef, useEffect } from "react"
 import { MathUtils } from "three"
+import { useStore } from "../../../../Objects/store"
 // import { shaderMaterial } from "@react-three/drei"
 
 function shaderMaterial(uniforms, vertexShader, fragmentShader, onInit) {
@@ -58,6 +59,13 @@ extend({ ShaderMat })
 const AniamtedShaderMat = animated("shaderMat")
 
 function AnimatedBakedMaterial({ toggle, map, activeEl }) {
+  const value = useRef(0)
+  const mouseRef = useRef(useStore.getState().mouseDown)
+  // Connect to the store on mount, disconnect on unmount, catch state-changes in a reference
+  useEffect(() =>
+    useStore.subscribe((state) => (mouseRef.current = state.mouseDown))
+  )
+
   const shadRef = useRef()
 
   useEffect(() => {
@@ -82,7 +90,14 @@ function AnimatedBakedMaterial({ toggle, map, activeEl }) {
       1
     )
 
+    // if (mouseRef.current && shadRef.current.uniforms.uMix.value < 1) {
+    //   shadRef.current.uniforms.uMix.value += 0.07
+    // } else if (!mouseRef.current && shadRef.current.uniforms.uMix.value > 0) {
+    //   shadRef.current.uniforms.uMix.value -= 0.06
+    // }
+
     // console.log(shadRef.current.uniforms.uMix.value)
+    // console.log(value.current)
 
     shadRef.current.uniforms.uMouseX.value = Math.floor(
       MathUtils.mapLinear(state.mouse.x, -1, 1, 0, 6)

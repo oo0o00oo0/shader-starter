@@ -169,75 +169,61 @@ bool isCol(float r,float g,float b,float test){
 
 void main()
 {
-  vec2 size=vec2(7000.,7000.);
-  // vec2 size=vec2(2000.,2000.);
-  //  vec2 size = vec2(12000.,12000.);
-  //  vec2 size = vec2(textureSize(colorTexture, 0));
-  float e=.01;
+  // vec2 size=vec2(7000.,7000.);
+  // float e=.01;
   
   vec4 color=texture2D(colorTexture,vUv);
   
-  float normalEdge=1.-length(sobel(normalTexture,vUv,size,contour));
+  // float normalEdge=1.-length(sobel(normalTexture,vUv,size,contour));
   
-  normalEdge=1.-clamp(smoothstep(.5-e,.5+e,normalEdge),.8,1.);
-  // normalEdge = 1.-clamp(smoothstep(.5-e, .5+e, normalEdge), 0., 1.);
+  // normalEdge=1.-clamp(smoothstep(.5-e,.5+e,normalEdge),.8,1.);
   
-  vec4 coordsFrontTextureTest=texture2D(coordsFrontTexture,vUv);
-  vec4 front=texture2D(coordsFrontTexture,vUv);
-  vec4 back=texture2D(coordsBackTexture,vUv);
+  // vec4 coordsFrontTextureTest=texture2D(coordsFrontTexture,vUv);
+  // vec4 front=texture2D(coordsFrontTexture,vUv);
+  // vec4 back=texture2D(coordsBackTexture,vUv);
   
-  // vec4 paper = texture(paperTexture, .00025 * vUv*size);
   
-  float l=clamp(2.*luma(color.rgb),0.,1.);
+  // float l=clamp(2.*luma(color.rgb),0.,1.);
   
-  mat2 r=rot(angleDark);
+  // mat2 r=rot(angleDark);
   
-  float hatchDark=0.;
-  if(l<.75){
-    hatchDark=(1.-l/.75)*lines(.275,r*hatchScale*vUv,size,1.)*color.a;
-  }
+  // float hatchDark=0.;
+  // if(l<.75){
+  //   hatchDark=(1.-l/.75)*lines(.275,r*hatchScale*vUv,size,1.)*color.a;
+  // }
   
-  l=clamp(luma(color.rgb)-.75,0.,1.)*3.;
-  r=rot(angleLight);
-  float hatchLight=0.;
-  if(l>.5){
-    hatchLight=((l-.5)*2.)*lines(.5,r*hatchScale*vUv,size,1.)*color.a;
-  }
+  // l=clamp(luma(color.rgb)-.75,0.,1.)*3.;
+  // r=rot(angleLight);
+  // float hatchLight=0.;
+  // if(l>.5){
+  //   hatchLight=((l-.5)*2.)*lines(.5,r*hatchScale*vUv,size,1.)*color.a;
+  // }
   
-  if(mod(length(back.xz),.2)<e){
-    back.a=1.;
-  }
+  // if(mod(length(back.xz),.2)<e){
+  //   back.a=1.;
+  // }
   
-  float stripe=(1.-min(front.a,.25+back.a))*color.a;
+  // float stripe=(1.-min(front.a,.25+back.a))*color.a;
   
-  // float stripe = 0.6;
-  // float stripe = (1.-min(front.a, .25 + back.a)) * color.a;
   
-  float w=(objectGrid*stripe)+(dark*hatchDark)+(light*hatchLight)+normalEdge;
-  // gl_FragColor.rgb = blendScreen(gl_FragColor.rgb, inkColor.rgb / 255., w);
-  // fragColor.rgb = blendScreen(fragColor.rgb, inkColor.rgb / 255., w) * 0.3;
-  // gl_FragColor.a = w;
+  // float w=(objectGrid*stripe)+(dark*hatchDark)+(light*hatchLight)+normalEdge;
+
   
-  float rr=texture2D(colorTexture,vUv).r;
-  float gg=texture2D(colorTexture,vUv).g;
-  float bb=texture2D(colorTexture,vUv).b;
+  // float rr=texture2D(colorTexture,vUv).r;
+  // float gg=texture2D(colorTexture,vUv).g;
+  // float bb=texture2D(colorTexture,vUv).b;
   
   // if (texture2D(colorTexture, vUv).b > 0.65){
     
-    vec4 pass=vec4(gl_FragColor.rgba);
-    
-    // if(isCol(rr,gg,bb,bb)){
-      //   gl_FragColor=mix(texture2D(colorTexture,vUv),vec4(0.,.61,.65,1.),uBlend);
-    // }else if(isCol(rr,gg,bb,gg)){
-      
-      //   gl_FragColor=mix(texture2D(colorTexture,vUv),vec4(.36,.43,.41,1.),uBlend);
-    // }else{
-      //   vec4 styled=vec4(blendScreen(gl_FragColor.rgb,inkColor.rgb/255.,w),w);
-      //   gl_FragColor=mix(texture2D(colorTexture,vUv),styled,uBlend);
-      //   // gl_FragColor = texture2D(colorTexture, vUv);
-    // }
-    vec4 styled=vec4(blendScreen(gl_FragColor.rgb,inkColor.rgb/255.,w),w);
-    gl_FragColor=styled;
+    // vec4 pass=vec4(gl_FragColor.rgba);
+    // vec4 styled=vec4(blendScreen(gl_FragColor.rgb,inkColor.rgb/255.,w),w);
+    // gl_FragColor=styled;
+
+  vec4 scene = vec4(color.xyz,1.);
+  vec4 bright = vec4(color.x,1.0,1.0,1.);
+
+    gl_FragColor=vec4(mix(scene, bright, uBlend));
+    // gl_FragColor=vec4(color.xyz,1.);
     // gl_FragColor=mix(texture2D(colorTexture,vUv),styled,uBlend);
     
   }
