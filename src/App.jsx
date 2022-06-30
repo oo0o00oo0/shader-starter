@@ -7,13 +7,15 @@ import SceneMain from "./Components/Scenes/SceneMain"
 import GodRaysScene from "./Components/GodRays/GodRays"
 import GodRaysVanillaScene from "./Components/GodRays/GodRaysVanilla"
 import { PPGodRays } from "./Components/GodRays/PPGodRays"
+import VolumeApp from "./Components/GodRays/VolumetricLight"
 
 function App() {
   return (
     <>
       {/* <GodRaysVanillaScene /> */}
       <Holder id="holder">
-        <PPGodRays />
+        {/* <PPGodRays /> */}
+        <VolumeApp />
 
         {/* <GodRaysScene /> */}
         {/* <BlackOut>
