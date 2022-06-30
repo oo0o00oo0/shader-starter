@@ -4,18 +4,24 @@ import { useTransition, a, useSpring } from "@react-spring/web"
 import styled from "styled-components"
 import { useStore } from "./Components/Objects/store"
 import SceneMain from "./Components/Scenes/SceneMain"
+import GodRaysScene from "./Components/GodRays/GodRays"
+import GodRaysVanillaScene from "./Components/GodRays/GodRaysVanilla"
+import { PPGodRays } from "./Components/GodRays/PPGodRays"
 
 function App() {
   return (
     <>
+      {/* <GodRaysVanillaScene /> */}
       <Holder id="holder">
-        <BlackOut>
+        <PPGodRays />
+
+        {/* <GodRaysScene /> */}
+        {/* <BlackOut>
           <SceneMain />
         </BlackOut>
-        <Drop />
+        <Drop /> */}
       </Holder>
-      <WhiteOut />
-      {/* <BlackOut /> */}
+      {/* <WhiteOut /> */}
     </>
   )
 }
